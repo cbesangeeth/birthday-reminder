@@ -8,5 +8,10 @@ module.exports = {
       dialect: "postgres",
       port: process.env.PORT,
       driver: "pg",
+      dialectOptions: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false
+      }
     },
 }

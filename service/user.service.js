@@ -1,6 +1,6 @@
 const userRepo = require('../repo/user.repo');
 
-exports.getUsers = async (request, response, next) => {
+exports.getUsers = async (req, res, next) => {
     try {
         console.log('inside user service');
 
@@ -15,5 +15,6 @@ exports.getUsers = async (request, response, next) => {
         return res.send(res.api);
     } catch (err) {
         console.log(err);
+        next(err);
     }
 };
