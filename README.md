@@ -2,7 +2,7 @@
 
 This app is a hobby project
 
-frontend url - TBD
+frontend url - https://cbesangeeth.github.io/birthday-reminder-ui/
 backend url - https://breminder.herokuapp.com/
 
 # Technology

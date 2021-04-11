@@ -6,6 +6,5 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-console.log('inside root handler');
 
 module.exports = router;

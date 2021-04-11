@@ -2,11 +2,13 @@ module.exports = function (sequelize, Sequelize) {
     var userSchema = sequelize.define("users", {
   
       id: {
+        field: 'id',
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
       name: {
+        field: 'name',
         type: Sequelize.STRING,
         allowNull: false
       },
