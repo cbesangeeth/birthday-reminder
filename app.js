@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./handlers/v1/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
@@ -19,8 +19,54 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(function (req, res, next) {
+  res.api = {
+    'success': true,
+    'error': {
+      "code": "",
+      "message": "",
+      "details": [{
+        "target": "",
+        "message": ""
+      }]
+    },
+    'data': {},
+    'statusCode': 200
+  };
+  next();
+});
+
+require('./routes')(app);
+
+app.use(function (err, req, res, next) {
+  if (!err) {
+    return next();
+  }
+
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+
+    res.api.success = false;
+    res.api.error.code = errorCode.BAD_REQUEST;
+    res.api.error.message = 'Invalid input';
+    res.api.error.details[0].target = 'body';
+    res.api.error.details[0].message = err.type;
+    res.api.data = {};
+    res.api.statusCode = 400;
+    res.status(res.api.statusCode);
+
+    return res.send(res.api);
+  } else {
+    res.api.success = false;
+    res.api.error.code = errorCode.INTERNAL_SERVER_ERROR
+    res.api.error.message = 'Oops! something broke';
+    res.api.error.details = [];
+    res.api.data = {};
+    res.api.statusCode = 500;
+    res.status(res.api.statusCode);
+
+    return res.send(res.api);
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
