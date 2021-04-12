@@ -17,6 +17,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Enable CORS for all methods
+app.use(function (req, res, next) {
+
+  res.set({
+    "Access-Control-Allow-Origin", "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Access-Control-Allow-Methods": "GET,POST,PATCH,DELETE",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Frame-Options": 'SAMEORIGIN',
+    "X-XSS-Protection": '1; mode=block',
+    "X-Content-Type-Options": 'nosniff',
+    "Cache-Control": 'no-cache, no-store, must-revalidate'
+  });
+
+  next()
+});
+
 app.use(function (req, res, next) {
   res.api = {
     'success': true,
